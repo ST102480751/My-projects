@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Save Your tasks</h1>
+    <input type="text" id="Task" placeholder="Enter your task">
+   <select  id="priority" style="display : none;">
+   
+    <option value="High">High</option>
+    <option value="Medium">Medium</option>
+    <option value="Low">Low</option>
+
+   </select>
+<input type="date" id="dueDate" style="display : none;">
+<input type="text" id="responsible" style="display : none;">
+
+    <br>
+    <br>
+    
+    <p id="Display task"></p>
+
+    <p id="display eddits"></p>
+    <br>
+    <br>
+
+    <button onclick="addTask()">Add</button>
+    <button onclick="removeTask()">remove</button>
+
+    <button onclick="displayTasks()">Display</button>
+
+    <button id="editbutton">Edit</button>
+    <button id="hidebutton">Hide</button>
+    <br>
+    <br>
+    <div id="messageContainer"></div>
+
+</body>
+
+<script src="to-do-list.js"></script>
+</html>
