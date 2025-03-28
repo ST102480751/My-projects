@@ -61,7 +61,7 @@ display.innerHTML=displayText;
 function removeTask(){
 
 
-let task= document.getElementById('Task').value;
+ 
  let todo = JSON.parse(localStorage.getItem('todo'))||[];
 
  todo.shift({task:task});

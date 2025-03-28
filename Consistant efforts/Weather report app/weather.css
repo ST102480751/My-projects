@@ -1,0 +1,9 @@
+.search-icon {
+    position: absolute;
+    top: 3%;
+    right: 490px;
+    transform: translateY(-60%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* Makes the icon not clickable */
+}
