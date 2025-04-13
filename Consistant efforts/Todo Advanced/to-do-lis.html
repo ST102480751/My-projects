@@ -8,37 +8,30 @@
 <body>
     <h1>Save Your tasks</h1>
     <input type="text" id="Task" placeholder="Enter your task">
-   <select  id="priority" style="display : none;">
-   
-    <option value="High">High</option>
-    <option value="Medium">Medium</option>
-    <option value="Low">Low</option>
+    <select id="priority" style="display: none;">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+    <input type="date" id="dueDate" style="display: none;">
+    <input type="text" id="responsible" style="display: none;">
 
-   </select>
-<input type="date" id="dueDate" style="display : none;">
-<input type="text" id="responsible" style="display : none;">
+    <br><br>
 
-    <br>
-    <br>
-    
-    <p id="Display task"></p>
+    <!-- FIXED the ID from "Display task" to "DisplayTask" -->
+    <p id="DisplayTask"></p>
 
     <p id="display eddits"></p>
-    <br>
-    <br>
+    <br><br>
 
     <button onclick="addTask()">Add</button>
     <button onclick="removeTask()">remove</button>
-
     <button onclick="displayTasks()">Display</button>
-
     <button id="editbutton">Edit</button>
     <button id="hidebutton">Hide</button>
-    <br>
-    <br>
+    <br><br>
     <div id="messageContainer"></div>
 
+    <script src="to-do-list.js"></script>
 </body>
-
-<script src="to-do-list.js"></script>
 </html>
