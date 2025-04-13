@@ -1,123 +1,104 @@
-let editIndex = null; // Track the task index being edited; initially set to null (no task is being edited)
-
-let todo = JSON.parse(localStorage.getItem('todo')) || []; // Retrieve the tasks from localStorage and parse them to an array; if none, initialize as an empty array
+let editIndex = null;
+let todo = JSON.parse(localStorage.getItem('todo')) || [];
 
 function showMessage(messagediv) {
-    let message = document.createElement('div'); // Create a new div element for the message
-    message.textContent = messagediv; // Set the text content of the message to the provided message
-    message.style.backgroundColor = "lightBlue"; // Set the background color of the message div to light blue
-    
-    message.style.padding = '10px'; // Add padding to the message div (note: there’s a typo; it should be 'padding')
-    message.style.margin = '10px'; // Add vertical margin above and below the message (another typo; extra semicolon here)
-    
-    document.getElementById('messageContainer').appendChild(message); // Add the message div to the container with ID 'messageContainer'
-    
+    let message = document.createElement('div');
+    message.textContent = messagediv;
+    message.style.backgroundColor = "lightBlue";
+    message.style.padding = '10px';
+    message.style.margin = '10px 0';
+    message.style.borderRadius = '5px';
+    document.getElementById('messageContainer').appendChild(message);
+
     setTimeout(() => {
-        message.remove(); // Remove the message after 3 seconds
+        message.remove();
     }, 3000);
 }
 
 function addTask() {
-    let task = document.getElementById('Task').value; // Get the value of the 'Task' input field
-    let priority = document.getElementById('priority').value; // Get the value of the 'priority' input field
-    let dueDate = document.getElementById('dueDate').value; // Get the value of the 'dueDate' input field
-    let responsible = document.getElementById('responsible').value; // Get the value of the 'responsible' input field
+    let task = document.getElementById('Task').value.trim();
+    let priority = document.getElementById('priority').value;
+    let dueDate = document.getElementById('dueDate').value;
+    let responsible = document.getElementById('responsible').value.trim();
 
-    if (task === "") { // Check if the task field is empty
-        showMessage("Please enter a task"); // Show an error message if the task is empty
-        return; // Exit the function to prevent adding an empty task
+    if (task === "") {
+        showMessage("Please enter a task");
+        return;
     }
 
-    if (editIndex !== null) { // If editIndex is not null, update an existing task
-        todo[editIndex] = { task, priority, dueDate, responsible }; // Update the task at editIndex with new values
-        editIndex = null; // Reset editIndex to null after editing
-        showMessage("Task updated"); // Show a message indicating that the task was updated
-    } else { 
-        todo.unshift({ task, priority, dueDate, responsible }); // Add a new task to the beginning of the todo array
-        showMessage("Task saved"); // Show a message indicating that the task was saved
+    if (editIndex !== null) {
+        todo[editIndex] = { task, priority, dueDate, responsible };
+        editIndex = null;
+        showMessage("Task updated");
+    } else {
+        todo.unshift({ task, priority, dueDate, responsible });
+        showMessage("Task saved");
     }
 
-    localStorage.setItem('todo', JSON.stringify(todo)); // Save the updated todo list to localStorage
+    localStorage.setItem('todo', JSON.stringify(todo));
 
-    // Clear the input fields after saving or updating a task
+    // Clear input fields
     document.getElementById('Task').value = '';
     document.getElementById('priority').value = '';
     document.getElementById('dueDate').value = '';
     document.getElementById('responsible').value = '';
 
-    displayTasks(); // Refresh the task list on the page by calling displayTasks
+    displayTasks();
 }
-
-document.getElementById('editbutton').addEventListener("click", function edit() {
-    let fields = ['priority', 'dueDate', 'responsible']; // Array of IDs for fields to toggle
-    fields.forEach(id => {
-        let field = document.getElementById(id); // Select each field by ID
-        field.style.display = (field.style.display === 'none') ? 'block' : 'none'; // Toggle display between 'none' and 'block'
-    });
-});
 
 function displayTasks() {
-    let display = document.getElementById('Display task'); // Get the element where tasks will be displayed
-    let displayText = ''; // Initialize an empty string for displaying task information
+    const display = document.getElementById('DisplayTask');
+    display.innerHTML = '';
 
-    if (todo.length === 0) { // Check if there are no tasks in the todo list
-        showMessage("There's no task saved"); // Show a message if there are no tasks
-        return; // Exit the function if no tasks are present
+    if (todo.length === 0) {
+        showMessage("There's no task saved");
+        return;
     }
 
-    todo.forEach((entry, index) => { // Loop through each task in the todo array
-        displayText += `
-            Task ${index + 1}: ${entry.task} - Priority: ${entry.priority} 
-            - Due: ${entry.dueDate} - Responsible: ${entry.responsible}
-            <button onclick="startEdit(${index})">Edit</button><br>`; // Create HTML with task details and an "Edit" button
+    todo.forEach((entry, index) => {
+        let taskDiv = document.createElement('div');
+        taskDiv.innerHTML = `
+            <strong>${entry.task}</strong><br>
+            Priority: ${entry.priority || 'N/A'}<br>
+            Due: ${entry.dueDate || 'N/A'}<br>
+            Responsible: ${entry.responsible || 'N/A'}<br>
+            <hr>
+        `;
+        display.appendChild(taskDiv);
     });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // Set the inner HTML of the display element to show the tasks
-   
-     
-
-    display.style.display = 'block'; // Ensure the display area is visible
 }
 
-function startEdit(index) {
-    editIndex = index; // Set editIndex to the index of the task being edited
-    let task = todo[index]; // Retrieve the task details at the given index
-
-    // Populate input fields with the task's current values
-    document.getElementById('Task').value = task.task;
-    document.getElementById('priority').value = task.priority;
-    document.getElementById('dueDate').value = task.dueDate;
-    document.getElementById('responsible').value = task.responsible;
-
-    showMessage("Editing task " + (index + 1)); // Show a message indicating the task being edited
+function editTask(index) {
+    let entry = todo[index];
+    document.getElementById('Task').value = entry.task;
+    document.getElementById('priority').value = entry.priority;
+    document.getElementById('dueDate').value = entry.dueDate;
+    document.getElementById('responsible').value = entry.responsible;
+    editIndex = index;
 }
 
 function removeTask() {
-    let task = document.getElementById('Task').value; // Get the value of the 'Task' input field
-    let todo = JSON.parse(localStorage.getItem('todo')) || []; // Retrieve tasks from localStorage; initialize as empty if none
-
-    todo.shift(); // Remove the first task in the todo list (does not check for a specific task)
-    localStorage.setItem('todo', JSON.stringify(todo)); // Save the updated list to localStorage
-
-    displayTasks(); // Refresh the task list after removal
+    if (todo.length === 0) {
+        showMessage("No tasks to remove");
+        return;
+    }
+    todo.pop();
+    localStorage.setItem('todo', JSON.stringify(todo));
+    displayTasks();
+    showMessage("Last task removed");
 }
 
-document.getElementById("hidebutton").addEventListener("click", function hide() {
-    let element = document.getElementById("Display task"); // Get the display element by ID
-    element.style.display = "none"; // Hide the display element
+document.getElementById('editbutton').addEventListener("click", function () {
+    toggleFields(true);
 });
+
+document.getElementById('hidebutton').addEventListener("click", function () {
+    toggleFields(false);
+});
+
+function toggleFields(show) {
+    let displayValue = show ? 'block' : 'none';
+    ['priority', 'dueDate', 'responsible'].forEach(id => {
+        document.getElementById(id).style.display = displayValue;
+    });
+}
