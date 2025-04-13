@@ -58,18 +58,22 @@ display.innerHTML=displayText;
 
 }
 
-function removeTask(){
+function removeTask() {
+    let todo = JSON.parse(localStorage.getItem('todo')) || [];
 
+    if (todo.length === 0) {
+        showMessage("No tasks to remove");
+        return;
+    }
 
- 
- let todo = JSON.parse(localStorage.getItem('todo'))||[];
+    todo.shift(); // Remove the first task (no need to pass any argument)
 
- todo.shift({task:task});
- localStorage.setItem('todo', JSON.stringify(todo));
+    localStorage.setItem('todo', JSON.stringify(todo)); // Save updated tasks back to localStorage
 
- let updatedTasksHTML = localStorage.getItem(todo);
-document.getElementById('Display task').innerHTML= updatedTasksHTML;
+    displayTasks(); // Refresh task display after removal
 
+    showMessage("First task removed"); // Notify user
 }
+
 
 
